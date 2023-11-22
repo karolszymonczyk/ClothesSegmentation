@@ -1,8 +1,6 @@
-import torch
-import torch.nn as nn
 import pytorch_lightning as pl
 
-from src.utils import create_mlp_module, save_model
+from src.utils import create_mlp_module
 
 
 CONFIG = {
@@ -19,12 +17,12 @@ MODEL_CONFIG = {
 
 
 def train() -> None:
-    model = create_mlp_module(MODEL_CONFIG)
+    model = create_mlp_module(**MODEL_CONFIG)
     trainer = pl.Trainer(
         max_epochs=CONFIG["max_epochs"],
     )
     trainer.fit(model)
-    save_model(model, CONFIG["model_save_path"])
+    trainer.save_checkpoint(CONFIG["model_save_path"])
 
 
 if __name__ == "__main__":

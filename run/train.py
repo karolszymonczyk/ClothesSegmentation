@@ -1,4 +1,5 @@
 import pytorch_lightning as pl
+from pytorch_lightning.loggers import MLFlowLogger
 
 from src.utils import create_mlp_module
 
@@ -17,10 +18,12 @@ MODEL_CONFIG = {
 
 
 def train() -> None:
-    model = create_mlp_module(**MODEL_CONFIG)
-    trainer = pl.Trainer(
-        max_epochs=CONFIG["max_epochs"],
+    mlf_logger = MLFlowLogger(
+        experiment_name="lightning_logs", tracking_uri="sqlite:///mlflow.db"
     )
+
+    model = create_mlp_module(**MODEL_CONFIG)
+    trainer = pl.Trainer(max_epochs=CONFIG["max_epochs"], logger=mlf_logger)
     trainer.fit(model)
     trainer.save_checkpoint(CONFIG["model_save_path"])
 

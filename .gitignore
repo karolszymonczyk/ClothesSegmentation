@@ -6,5 +6,7 @@ mlflow.db
 .env
 .vscode
 lightning_logs
+mlruns
+mlcheckpoints
 test.ipynb
 notes.txt

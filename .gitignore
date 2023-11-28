@@ -1,7 +1,6 @@
 *.pyc
 *__pycache__
 data
-models
 mlflow.db
 .env
 .vscode

@@ -1,23 +1,29 @@
+import argparse
 import pytorch_lightning as pl
 
-from src.utils import create_mlp_module
+from src.utils import create_mlp_module, load_config
 
 
-CONFIG = {"checkpoint_path": "./models/mlp.pth"}
+def test(args: argparse.Namespace) -> None:
+    config = load_config(args.config_path)
+    model_config = config["model"]
 
-MODEL_CONFIG = {
-    "input_size": 28 * 28,
-    "hidden_size": 128,
-    "output_size": 10,
-    "lr": 1e-3,
-}
-
-
-def test() -> None:
-    model = create_mlp_module(checkpoint_path=CONFIG["checkpoint_path"], **MODEL_CONFIG)
+    model = create_mlp_module(**model_config)
     trainer = pl.Trainer()
     trainer.test(model, verbose=True)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Run this script to test model created from given config."
+    )
+    parser.add_argument(
+        "-c", "--config_path", help="Path to config file", required=True
+    )
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == "__main__":
-    test()
+    args = parse_args()
+    test(args)

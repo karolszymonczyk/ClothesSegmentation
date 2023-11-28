@@ -13,8 +13,11 @@ class MLFlowLogger(loggers.MLFlowLogger):
         )
 
     def after_save_checkpoint(self, checkpoint_callback: ModelCheckpoint) -> None:
+        best_model_path = checkpoint_callback.best_model_path
+        last_model_path = checkpoint_callback.last_model_path
+        model_path = last_model_path if last_model_path != "" else best_model_path
         self.experiment.log_artifact(
             self.run_id,
-            checkpoint_callback.best_model_path,
+            model_path,
             artifact_path="model_checkpoint",
         )

@@ -17,7 +17,6 @@ def train(args: argparse.Namespace) -> None:
         tracking_uri=logger_config["tracking_uri"],
     )
 
-    # TODO: enable pretrained checkpoint
     model = create_mlp_module(**model_config)
     trainer = pl.Trainer(
         max_epochs=config["max_epochs"],

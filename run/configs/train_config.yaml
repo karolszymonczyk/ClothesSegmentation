@@ -1,10 +1,11 @@
-max_epochs: 1
+max_epochs: 10
 logger:
   experiment_name: "setup"
   run_name: "test_run"
   checkpoint_dir: "mlcheckpoints"
   tracking_uri: "sqlite:///mlflow.db"
 model:
+  checkpoint_path: "/Users/karol/projects/ClothesSegmentation/mlruns/2/504da14d50b14b9a99fe76a19ac9e537/artifacts/model_checkpoint/last-v6.ckpt"
   input_size: 784  # (28 * 28)
   hidden_size: 128
   output_size: 10

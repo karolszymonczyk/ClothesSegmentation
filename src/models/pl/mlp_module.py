@@ -85,8 +85,6 @@ class MLPModule(pl.LightningModule):
         self, predictions: torch.Tensor, labels: torch.Tensor
     ) -> Dict[str, float]:
         metrics = {"accuracy": self.calc_accuracy(predictions, labels)}
-        print("XDDDD")
-        "XD"
         return metrics
 
     def calc_accuracy(

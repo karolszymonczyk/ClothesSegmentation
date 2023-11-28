@@ -1,6 +1,5 @@
 *.pyc
 *__pycache__
-data
 mlflow.db
 .env
 .vscode
@@ -9,3 +8,4 @@ mlruns
 mlcheckpoints
 test.ipynb
 notes.txt
+/data

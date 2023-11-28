@@ -1,14 +1,15 @@
 import argparse
 import pytorch_lightning as pl
 
-from src.utils import create_mlp_module, load_config
+from src.models.models_factory import create_model
+from src.utils import load_config
 
 
 def test(args: argparse.Namespace) -> None:
     config = load_config(args.config_path)
     model_config = config["model"]
 
-    model = create_mlp_module(**model_config)
+    model = create_model(**model_config)
     trainer = pl.Trainer()
     trainer.test(model, verbose=True)
 

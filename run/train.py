@@ -3,7 +3,8 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 
 from src.loggers.mlflow_logger import MLFlowLogger
-from src.utils import create_mlp_module, load_config
+from src.models.models_factory import create_model
+from src.utils import load_config
 
 
 def train(args: argparse.Namespace) -> None:
@@ -17,7 +18,7 @@ def train(args: argparse.Namespace) -> None:
         tracking_uri=logger_config["tracking_uri"],
     )
 
-    model = create_mlp_module(**model_config)
+    model = create_model(**model_config)
     trainer = pl.Trainer(
         max_epochs=config["max_epochs"],
         logger=mlf_logger,

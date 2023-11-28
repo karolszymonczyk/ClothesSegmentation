@@ -1,23 +1,39 @@
-from typing import Dict
+from typing import Any, Dict
 import torch
 import torch.utils.data as data
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
+from src.data.dataloader_factory import create_dataloader
 
 from src.models.mlp import MLP
 
 
 class MLPModule(pl.LightningModule):
     def __init__(
-        self, input_size: int, hidden_size: int, output_size: int, lr: float = 1e-3
+        self,
+        input_size: int,
+        hidden_size: int,
+        output_size: int,
+        dataloaders_config: Dict[str, Any],
+        lr: float = 1e-3,
     ) -> None:
         super().__init__()
 
         self.model = MLP(input_size, hidden_size, output_size)
-
         self.criterion = torch.nn.CrossEntropyLoss()
         self.lr = lr
+
+        self.dataloaders_config = dataloaders_config
+        transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+        )
+        self.train_dataset = datasets.FashionMNIST(
+            root="./data", train=True, download=True, transform=transform
+        )
+        self.test_dataset = datasets.FashionMNIST(
+            root="./data", train=False, download=True, transform=transform
+        )
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
         optimizer = torch.optim.Adam(self.parameters(), lr=float(self.lr))
@@ -34,14 +50,9 @@ class MLPModule(pl.LightningModule):
         return loss
 
     def train_dataloader(self) -> data.DataLoader:
-        transform = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
-        )
-        train_dataset = datasets.FashionMNIST(
-            root="./data", train=True, download=True, transform=transform
-        )
-        train_dataloader = DataLoader(
-            dataset=train_dataset, batch_size=64, shuffle=True
+        train_dataloader_config = self.dataloaders_config["train"]
+        train_dataloader = create_dataloader(
+            self.train_dataset, **train_dataloader_config
         )
         return train_dataloader
 
@@ -55,13 +66,10 @@ class MLPModule(pl.LightningModule):
         return metrics
 
     def val_dataloader(self) -> data.DataLoader:
-        transform = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+        test_dataloader_config = self.dataloaders_config["val"]
+        test_dataloader = create_dataloader(
+            self.train_dataset, **test_dataloader_config
         )
-        test_dataset = datasets.FashionMNIST(
-            root="./data", train=False, download=True, transform=transform
-        )
-        test_dataloader = DataLoader(dataset=test_dataset, batch_size=64, shuffle=False)
         return test_dataloader
 
     def test_step(self, batch: torch.Tensor) -> torch.Tensor:
@@ -72,13 +80,10 @@ class MLPModule(pl.LightningModule):
         return metrics
 
     def test_dataloader(self) -> data.DataLoader:
-        transform = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+        test_dataloader_config = self.dataloaders_config["test"]
+        test_dataloader = create_dataloader(
+            self.train_dataset, **test_dataloader_config
         )
-        test_dataset = datasets.FashionMNIST(
-            root="./data", train=False, download=True, transform=transform
-        )
-        test_dataloader = DataLoader(dataset=test_dataset, batch_size=64, shuffle=False)
         return test_dataloader
 
     def _calculate_metrics(

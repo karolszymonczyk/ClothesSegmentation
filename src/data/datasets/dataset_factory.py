@@ -1,9 +1,9 @@
 from typing import Optional
 from torchvision import datasets, transforms
-from torch.utils.data import DataLoader, Dataset, Subset
+from torch.utils.data import Dataset, Subset
 
 
-def create_fashionmnist_dataset(root_path: str, is_train: bool) -> DataLoader:
+def create_fashionmnist_dataset(root_path: str, is_train: bool) -> Dataset:
     transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
     )

@@ -1,6 +1,7 @@
 import torch
-import pytorch_lightning as pl
-from typing import List, Union
+import yaml
+from pathlib import Path
+from typing import Dict, List, Union
 
 from src.models.pl.mlp_module import MLPModule
 
@@ -10,6 +11,11 @@ def batch_data(
 ) -> Union[List, torch.Tensor]:
     for i in range(0, len(data), batch_size):
         yield data[i : i + batch_size]
+
+
+def load_config(config_path: Union[str, Path]) -> Dict:
+    with open(config_path, "r") as config_file:
+        return yaml.load(config_file, Loader=yaml.FullLoader)
 
 
 def create_mlp_module(checkpoint_path: str = None, **config) -> MLPModule:

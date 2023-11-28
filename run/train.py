@@ -1,40 +1,30 @@
+import argparse
 import pytorch_lightning as pl
-from pytorch_lightning.loggers import MLFlowLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 
-from src.utils import create_mlp_module
+from src.loggers.mlflow_logger import MLFlowLogger
+from src.utils import create_mlp_module, load_config
 
 
-CONFIG = {
-    "max_epochs": 1,
-    "experiment_name": "setup",
-    "run_name": "test_run",
-    "checkpoint_dir": "mlcheckpoints",
-    "tracking_uri": "sqlite:///mlflow.db",
-}
+def train(args: argparse.Namespace) -> None:
+    config = load_config(args.config_path)
+    logger_config = config["logger"]
+    model_config = config["model"]
 
-MODEL_CONFIG = {
-    "input_size": 28 * 28,
-    "hidden_size": 128,
-    "output_size": 10,
-    "lr": 1e-3,
-}
-
-
-def train() -> None:
     mlf_logger = MLFlowLogger(
-        experiment_name=CONFIG["experiment_name"],
-        run_name=CONFIG["run_name"],
-        tracking_uri=CONFIG["tracking_uri"],
+        experiment_name=logger_config["experiment_name"],
+        run_name=logger_config["run_name"],
+        tracking_uri=logger_config["tracking_uri"],
     )
 
-    model = create_mlp_module(**MODEL_CONFIG)
+    # TODO: enable pretrained checkpoint
+    model = create_mlp_module(**model_config)
     trainer = pl.Trainer(
-        max_epochs=CONFIG["max_epochs"],
+        max_epochs=config["max_epochs"],
         logger=mlf_logger,
         callbacks=[
             ModelCheckpoint(
-                CONFIG["checkpoint_dir"],
+                logger_config["checkpoint_dir"],
                 monitor="val_loss",
                 mode="min",
                 save_top_k=3,
@@ -42,8 +32,21 @@ def train() -> None:
             )
         ],
     )
+    mlf_logger.log_file(path=args.config_path, artifact_path="train_config")
     trainer.fit(model)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Run this script to train model created from given config."
+    )
+    parser.add_argument(
+        "-c", "--config_path", help="Path to config file", required=True
+    )
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == "__main__":
-    train()
+    args = parse_args()
+    train(args)

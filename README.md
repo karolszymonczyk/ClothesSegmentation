@@ -1,7 +1,12 @@
 # ClothesSegmentation
 
+### MlFlow Server
+```mlflow ui --backend-store-uri sqlite:///mlflow.db```
+
 ### Train
-```PYTHONPATH=. src/train.py```
+```PYTHONPATH=. python run/train.py {config_path}```
+#### Example
+```PYTHONPATH=. python run/train.py run/configs/train_config.yaml```
 
 ### Test
-```PYTHONPATH=. src/test.py```
+```PYTHONPATH=. run/test.py```

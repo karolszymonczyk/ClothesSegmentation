@@ -1,0 +1,11 @@
+max_epochs: 1
+logger:
+  experiment_name: "setup"
+  run_name: "test_run"
+  checkpoint_dir: "mlcheckpoints"
+  tracking_uri: "sqlite:///mlflow.db"
+model:
+  input_size: 784  # (28 * 28)
+  hidden_size: 128
+  output_size: 10
+  lr: 1e-3

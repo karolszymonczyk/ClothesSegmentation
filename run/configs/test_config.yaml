@@ -6,9 +6,13 @@ model:
   output_size: 10
   lr: 1e-3
 
+  dataset_config:
+    name: "FashionMNIST"
+    root_path: "./data/fashionmnist"
+
   dataloaders_config:
     test:
       shuffle: False
       num_workers: 7
       batch_size: 32
-      
+      persistent_workers: True

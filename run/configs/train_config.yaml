@@ -13,6 +13,10 @@ model:
   output_size: 10
   lr: 1e-3
 
+  dataset_config:
+    name: "FashionMNIST"
+    root_path: "./data/fashionmnist"
+
   dataloaders_config:
     train:
       shuffle: True

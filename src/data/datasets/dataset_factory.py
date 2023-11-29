@@ -1,6 +1,8 @@
-from typing import Optional
+from typing import Optional, Tuple, Callable
 from torchvision import datasets, transforms
 from torch.utils.data import Dataset, Subset
+
+from src.data.datasets.deep_fashion_mask_dataset import DeepFashionMaskDataset
 
 
 def create_fashionmnist_dataset(root_path: str, is_train: bool) -> Dataset:
@@ -13,8 +15,21 @@ def create_fashionmnist_dataset(root_path: str, is_train: bool) -> Dataset:
     return dataset
 
 
+def create_deep_fashion_mask_dataset(
+    root_path: str, is_train: bool, transform: Callable, target_size_hw: Tuple[int, int]
+) -> Dataset:
+    transform = transforms.Compose(
+        [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+    )
+    dataset = DeepFashionMaskDataset(
+        is_train, target_size_hw, transform, root_path=root_path
+    )
+    return dataset
+
+
 DATASETS_CREATORS = {
     "FashionMNIST": create_fashionmnist_dataset,
+    "DeepFasionMask": create_deep_fashion_mask_dataset,
 }
 
 

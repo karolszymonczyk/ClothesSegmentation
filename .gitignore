@@ -3,6 +3,7 @@
 mlflow.db
 .env
 .vscode
+.DS_Store
 lightning_logs
 mlruns
 mlcheckpoints

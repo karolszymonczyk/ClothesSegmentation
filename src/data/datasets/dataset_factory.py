@@ -16,20 +16,21 @@ def create_fashionmnist_dataset(root_path: str, is_train: bool) -> Dataset:
 
 
 def create_deep_fashion_mask_dataset(
-    root_path: str, is_train: bool, transform: Callable, target_size_hw: Tuple[int, int]
+    root_path: str, is_train: bool, target_size_hw: Tuple[int, int]
 ) -> Dataset:
     transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+        [
+            transforms.ToTensor(),
+            transforms.Resize(target_size_hw, antialias=True),
+        ]
     )
-    dataset = DeepFashionMaskDataset(
-        is_train, target_size_hw, transform, root_path=root_path
-    )
+    dataset = DeepFashionMaskDataset(root_path, is_train, target_size_hw, transform)
     return dataset
 
 
 DATASETS_CREATORS = {
     "FashionMNIST": create_fashionmnist_dataset,
-    "DeepFasionMask": create_deep_fashion_mask_dataset,
+    "DeepFashionMask": create_deep_fashion_mask_dataset,
 }
 
 

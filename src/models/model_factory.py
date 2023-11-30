@@ -11,7 +11,9 @@ def create_mlp_module(checkpoint_path: str = None, **config) -> MLPModule:
 
 
 def create_mock_module(checkpoint_path: str = None, **config) -> MLPModule:
-    return MockModule(**config)
+    img_heigth, img_width = config["dataset_config"]["target_size_hw"]
+    input_dim = 3 * img_heigth * img_width
+    return MockModule(input_dim=input_dim, **config)
 
 
 MODEL_CREATORS: Dict[str, Callable] = {

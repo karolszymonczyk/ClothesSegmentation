@@ -4,7 +4,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from src.data.datasets.dataset_factory import create_dataset
 
 from src.loggers.mlflow_logger import MLFlowLogger
-from src.models.models_factory import create_model
+from src.models.model_factory import create_model
 from src.utils import load_config
 
 

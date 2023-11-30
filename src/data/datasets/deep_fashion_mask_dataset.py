@@ -10,11 +10,11 @@ from typing import Dict, List, Tuple, Callable
 class DeepFashionMaskDataset(data.Dataset):
     def __init__(
         self,
+        root_path: str,
         is_train: bool,
         target_size_hw: Tuple[int, int],
         transform: Callable,
         data_keys=["images", "mask"],
-        root_path: str = "./data/DeepFashionMask",
     ) -> None:
         self.is_train = is_train
         self.target_size_hw = target_size_hw
@@ -41,11 +41,13 @@ class DeepFashionMaskDataset(data.Dataset):
         mask = Image.open(io.BytesIO(byte_mask))
 
         mask_transform = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+            [
+                transforms.ToTensor(),
+                transforms.Resize(self.target_size_hw, antialias=True),
+            ]
         )
 
-        # TODO: resize to target_size
         mask_tensor = mask_transform(mask)
         image_tensor = self.transform(image)
 
-        return {"image": image_tensor.float(), "mask": mask_transform(mask)}
+        return {"image": image_tensor.float(), "mask": mask_tensor}

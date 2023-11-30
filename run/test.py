@@ -1,7 +1,7 @@
 import argparse
 import pytorch_lightning as pl
 
-from src.models.models_factory import create_model
+from src.models.model_factory import create_model
 from src.utils import load_config
 
 

@@ -34,7 +34,6 @@ def train(args: argparse.Namespace) -> None:
         ],
     )
     mlf_logger.log_file(path=args.config_path, artifact_path="train_config")
-    mlf_logger.log_hyperparams(config)
     trainer.fit(model)
 
 

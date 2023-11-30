@@ -1,6 +1,7 @@
 from torch import nn
 from typing import Callable, Dict
 from src.models.pl.mlp_module import MLPModule
+from src.models.pl.mock_module import MockModule
 
 
 def create_mlp_module(checkpoint_path: str = None, **config) -> MLPModule:
@@ -9,8 +10,13 @@ def create_mlp_module(checkpoint_path: str = None, **config) -> MLPModule:
     return MLPModule(**config)
 
 
+def create_mock_module(checkpoint_path: str = None, **config) -> MLPModule:
+    return MockModule(**config)
+
+
 MODEL_CREATORS: Dict[str, Callable] = {
     "MLP": create_mlp_module,
+    "Mock": create_mock_module,
 }
 
 

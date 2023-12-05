@@ -1,17 +1,19 @@
 import argparse
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
-from src.data.datasets.dataset_factory import create_dataset
 
 from src.loggers.mlflow_logger import MLFlowLogger
 from src.models.model_factory import create_model
 from src.utils import load_config
+from src.visualization.visualization_callback import VisualizationCallback
+from src.visualization.visualizers.image_visualizer import ImageVisualizer
 
 
 def train(args: argparse.Namespace) -> None:
     config = load_config(args.config_path)
     logger_config = config["logger"]
     model_config = config["model"]
+    visualization_config = config["visualization"]
 
     mlf_logger = MLFlowLogger(
         experiment_name=logger_config["experiment_name"],
@@ -22,6 +24,7 @@ def train(args: argparse.Namespace) -> None:
     model = create_model(**model_config)
     trainer = pl.Trainer(
         max_epochs=config["max_epochs"],
+        precision=config["precision"],
         logger=mlf_logger,
         callbacks=[
             ModelCheckpoint(
@@ -30,7 +33,15 @@ def train(args: argparse.Namespace) -> None:
                 mode="min",
                 save_top_k=3,
                 save_last=True,
-            )
+            ),
+            VisualizationCallback(
+                visualizer=ImageVisualizer(
+                    logger=mlf_logger,
+                    save_path=visualization_config["save_path"],
+                    image_size_hw=visualization_config["image_size_hw"],
+                ),
+                frames=visualization_config["frames"],
+            ),
         ],
     )
     mlf_logger.log_file(path=args.config_path, artifact_path="train_config")

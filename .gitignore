@@ -5,8 +5,9 @@ mlflow.db
 .vscode
 .DS_Store
 lightning_logs
-mlruns
-mlcheckpoints
+/data
+/mlruns
+/mlcheckpoints
+/mlf_visualizations
 test.ipynb
 notes.txt
-/data

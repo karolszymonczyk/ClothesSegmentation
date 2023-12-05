@@ -1,4 +1,5 @@
 max_epochs: 2
+precision: 32
 logger:
   experiment_name: "visualization_test"
   run_name: "mock model"
@@ -26,3 +27,8 @@ model:
       num_workers: 7
       batch_size: 2
       persistent_workers: True
+
+visualization:
+  save_path: "mlf_visualizations"
+  image_size_hw: 256
+  frames: [0, 1, 2]

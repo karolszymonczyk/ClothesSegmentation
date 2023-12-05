@@ -24,7 +24,7 @@ class MockModule(DefaultPlModule):
 
     def training_step(self, batch: torch.Tensor) -> torch.Tensor:
         images = batch["image"]
-        pred_img, debug_img = self.forward(images)
+        pred_img = self.forward(images)
         labels = torch.ones_like(pred_img)
         loss = self.criterion(pred_img, labels)
         self.log("train_loss", loss)
@@ -34,7 +34,7 @@ class MockModule(DefaultPlModule):
         self, batch: Dict[str, torch.Tensor], prefix: str
     ) -> Dict[str, Any]:
         images = batch["image"]
-        pred_img, debug_img = self.forward(images)
+        pred_img = self.forward(images)
         labels = torch.ones_like(pred_img)
         loss = self.criterion(pred_img, labels)
         self.log(f"{prefix}_loss", loss)

@@ -36,6 +36,6 @@ class VisualizationCallback(Callback):
             predictions = pl_module.forward(stacked_images)
         self.visualizer.log_visualizations(
             images=stacked_images,
-            predictions=predictions,
+            predictions=predictions.cpu(),
             epoch=pl_module.current_epoch,
         )

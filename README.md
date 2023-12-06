@@ -1,7 +1,7 @@
 # ClothesSegmentation
 
 ### MlFlow Server
-```mlflow ui --backend-store-uri sqlite:///mlflow.db```
+```mlflow ui --backend-store-uri sqlite:///mlflow.db -p 5001```
 
 ### Train
 ```PYTHONPATH=. python run/train.py --config_path {config_path}```

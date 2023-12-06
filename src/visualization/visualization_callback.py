@@ -31,11 +31,15 @@ class VisualizationCallback(Callback):
 
     def log_visualization(self, pl_module: DefaultPlModule, dataset: Dataset) -> None:
         images = [dataset[frame]["image"].to(pl_module.device) for frame in self.frames]
+        masks = [dataset[frame]["mask"].to(pl_module.device) for frame in self.frames]
         stacked_images = torch.stack(images)
+        stacked_masks = torch.stack(masks)
         with torch.no_grad():
             predictions = pl_module.forward(stacked_images)
         self.visualizer.log_visualizations(
-            images=stacked_images,
-            predictions=predictions.cpu(),
+            images=stacked_images.cpu(),
+            predictions=stacked_masks.cpu(),
+            # TODO: make model for predictoing mas
+            # predictions=predictions.cpu(),
             epoch=pl_module.current_epoch,
         )

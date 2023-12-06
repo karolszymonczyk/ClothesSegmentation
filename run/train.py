@@ -7,6 +7,7 @@ from src.models.model_factory import create_model
 from src.utils import load_config
 from src.visualization.visualization_callback import VisualizationCallback
 from src.visualization.visualizers.image_visualizer import ImageVisualizer
+from src.visualization.visualizers.mask_visualizer import MaskVisualizer
 
 
 def train(args: argparse.Namespace) -> None:
@@ -35,7 +36,7 @@ def train(args: argparse.Namespace) -> None:
                 save_last=True,
             ),
             VisualizationCallback(
-                visualizer=ImageVisualizer(
+                visualizer=MaskVisualizer(
                     logger=mlf_logger,
                     save_path=visualization_config["save_path"],
                     image_size_hw=visualization_config["image_size_hw"],

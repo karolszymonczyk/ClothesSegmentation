@@ -13,7 +13,7 @@ model:
   dataset_config:
     name: "DeepFashionMask"
     root_path: "./data/DeepFashionMask"
-    target_size_hw: [28, 28]
+    target_size_hw: [64, 64]
     subset: 10
 
   dataloaders_config:
@@ -30,5 +30,5 @@ model:
 
 visualization:
   save_path: "mlf_visualizations"
-  image_size_hw: 256
+  image_size_hw: [512, 512]
   frames: [0, 1, 2]

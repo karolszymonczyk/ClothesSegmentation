@@ -8,6 +8,8 @@ from typing import Dict, List, Tuple, Callable
 
 
 class DeepFashionMaskDataset(data.Dataset):
+    """Dataset source: https://huggingface.co/datasets/SaffalPoosh/deepFashion-with-masks"""
+
     def __init__(
         self,
         root_path: str,
@@ -38,7 +40,7 @@ class DeepFashionMaskDataset(data.Dataset):
         byte_mask = mask_dict["bytes"]
 
         image = Image.open(io.BytesIO(byte_image)).convert("RGB")
-        mask = Image.open(io.BytesIO(byte_mask))
+        mask = Image.open(io.BytesIO(byte_mask)).convert("L")
 
         mask_transform = transforms.Compose(
             [

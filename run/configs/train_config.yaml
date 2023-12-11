@@ -1,13 +1,13 @@
 max_epochs: 2
 precision: 32
 logger:
-  experiment_name: "visualization_test"
-  run_name: "mock model"
+  experiment_name: "mask_model"
+  run_name: "cnn model test"
   checkpoint_dir: "mlcheckpoints"
   tracking_uri: "sqlite:///mlflow.db"
 
 model:
-  name: "Mock"
+  name: "CNN"
   lr: 1e-3
 
   dataset_config:

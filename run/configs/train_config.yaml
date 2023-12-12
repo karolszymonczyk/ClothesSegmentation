@@ -1,8 +1,8 @@
-max_epochs: 2
+max_epochs: 100
 precision: 32
 logger:
   experiment_name: "mask_model"
-  run_name: "cnn model test"
+  run_name: "test iou and dice coeff metrics"
   checkpoint_dir: "mlcheckpoints"
   tracking_uri: "sqlite:///mlflow.db"
 
@@ -13,19 +13,19 @@ model:
   dataset_config:
     name: "DeepFashionMask"
     root_path: "./data/DeepFashionMask"
-    target_size_hw: [64, 64]
+    target_size_hw: [512, 512]
     subset: 10
 
   dataloaders_config:
     train:
       shuffle: True
       num_workers: 7
-      batch_size: 2
+      batch_size: 16
       persistent_workers: True
     val:
       shuffle: False
       num_workers: 7
-      batch_size: 2
+      batch_size: 16
       persistent_workers: True
 
 visualization:

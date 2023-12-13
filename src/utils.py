@@ -9,6 +9,7 @@ def load_config(config_path: Union[str, Path]) -> Dict:
         return yaml.load(config_file, Loader=yaml.FullLoader)
 
 
-def crate_if_not_exists(path: str) -> None:
-    if not os.path.exists(path):
-        os.makedirs(path)
+def crate_if_not_exists(path: Union[str, Path]) -> None:
+    path_object = Path(path)
+    if not Path.exists(path_object):
+        os.makedirs(path_object)

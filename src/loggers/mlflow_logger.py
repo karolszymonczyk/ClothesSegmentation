@@ -9,7 +9,7 @@ class MLFlowLogger(loggers.MLFlowLogger):
 
     def log_image(self, name: str, image_path: str, epoch: int) -> None:
         self.experiment.log_image(
-            self.run_id, Image.open(image_path), f"epoch_{epoch:02d}_{name}.png"
+            self.run_id, Image.open(image_path), f"epoch_{epoch:03d}_{name}.png"
         )
 
     def after_save_checkpoint(self, checkpoint_callback: ModelCheckpoint) -> None:

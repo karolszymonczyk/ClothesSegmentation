@@ -1,4 +1,4 @@
-from typing import Optional, Tuple, Callable
+from typing import Optional, Tuple
 from torchvision import datasets, transforms
 from torch.utils.data import Dataset, Subset
 

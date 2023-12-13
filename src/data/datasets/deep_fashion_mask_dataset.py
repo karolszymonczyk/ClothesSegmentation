@@ -2,6 +2,7 @@ import io
 import torch
 import pandas as pd
 from PIL import Image
+from pathlib import Path
 import torch.utils.data as data
 from torchvision import transforms
 from typing import Dict, List, Tuple, Callable
@@ -25,9 +26,12 @@ class DeepFashionMaskDataset(data.Dataset):
         self.data = self._load_data(self.root_path, data_keys)
 
     def _load_data(self, root_path: str, data_keys: List[str]) -> pd.DataFrame:
-        # TODO: read data from all files in root_path
-        df = pd.read_parquet(root_path, engine="pyarrow")
-        return df[data_keys]
+        root_path_object = Path(root_path)
+        subset = "train" if self.is_train else "test"
+        subset_path = root_path_object / f"{subset}.parquet"
+        df = pd.read_parquet(subset_path, engine="pyarrow")
+        df_with_new_index = df.reset_index()
+        return df_with_new_index[data_keys]
 
     def __len__(self) -> int:
         return len(self.data)

@@ -1,5 +1,6 @@
 from typing import Any, Dict
 import torch
+from src.metrics.metrics import calc_accuracy
 
 from src.models.pl.default_pl_module import DefaultPlModule
 from src.models.mlp import MLP
@@ -45,12 +46,5 @@ class MLPModule(DefaultPlModule):
     def _calculate_metrics(
         self, predictions: torch.Tensor, labels: torch.Tensor
     ) -> Dict[str, float]:
-        metrics = {"accuracy": self.calc_accuracy(predictions, labels)}
+        metrics = {"accuracy": calc_accuracy(predictions, labels)}
         return metrics
-
-    def calc_accuracy(
-        self, predictions: torch.Tensor, labels: torch.Tensor
-    ) -> torch.Tensor:
-        predicted_lables = torch.argmax(predictions, dim=1)
-        accuracy = torch.sum(predicted_lables == labels)
-        return accuracy / predictions.shape[0]

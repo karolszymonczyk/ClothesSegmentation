@@ -27,6 +27,8 @@ class CNNModule(DefaultPlModule):
         predictions = self.forward(images)
         loss = self.criterion(predictions, masks)
         self.log("train_loss", loss)
+        metrics = self.step_with_metrics(batch, prefix="train")
+        self.log_dict(metrics)
         return loss
 
     def step_with_metrics(
@@ -38,7 +40,7 @@ class CNNModule(DefaultPlModule):
         self.log(f"{prefix}_loss", loss)
         metrics = self._calculate_metrics(predictions.detach(), masks)
         metrics_with_prefix = self._add_prefix_to_metrics(metrics, prefix)
-        self.log_dict(metrics_with_prefix)
+        return metrics_with_prefix
 
     def _calculate_metrics(
         self, predictions: torch.Tensor, labels: torch.Tensor

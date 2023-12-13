@@ -43,10 +43,12 @@ class DefaultPlModule(pl.LightningModule, ABC):
 
     def validation_step(self, batch: Dict[str, torch.Tensor]) -> torch.Tensor:
         metrics = self.step_with_metrics(batch, prefix="val")
+        self.log_dict(metrics)
         return metrics
 
     def test_step(self, batch: Dict[str, torch.Tensor]) -> torch.Tensor:
         metrics = self.step_with_metrics(batch, prefix="test")
+        self.log_dict(metrics)
         return metrics
 
     def train_dataloader(self) -> data.DataLoader:

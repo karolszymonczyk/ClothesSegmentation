@@ -20,7 +20,7 @@ def create_deep_fashion_mask_dataset(
 ) -> Dataset:
     transform = transforms.Compose(
         [
-            transforms.ToTensor(),
+            transforms.ToTensor(),  # already normalize images to [0, 1] range
             transforms.Resize(target_size_hw, antialias=True),
         ]
     )
